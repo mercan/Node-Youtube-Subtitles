@@ -1,7 +1,7 @@
 const VideoService = require("../../services/Video");
 
 const searchText = async (req, res) => {
-  const { url, text, lang = "tr" } = req.query;
+  const { url, text, lang = "tr", trim = false } = req.query;
 
   const youtube = "https://www.youtube.com";
   const youtubeURL = new URL(url.length !== 11 ? url : `${youtube}/watch?v=${url}`);
@@ -14,7 +14,7 @@ const searchText = async (req, res) => {
     });
   }
 
-  const subtitles = await VideoService.findOne(videoId, text.trim(), lang);
+  const subtitles = await VideoService.findOne(videoId, trim ? text.trim() : text, lang);
 
   if (subtitles.message) {
     return res.code(404).send({ status: 404, message: subtitles.message });
