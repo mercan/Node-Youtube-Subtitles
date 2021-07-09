@@ -15,6 +15,15 @@ const searchText = async (req, res) => {
   }
 
   const subtitles = await VideoService.findOne(videoId, text.trim(), lang);
+
+  if (subtitles.message) {
+    return res.code(404).send({ status: 404, message: subtitles.message });
+  }
+
+  if (subtitles.error) {
+    return res.code(400).send({ status: 400, message: subtitles.error });
+  }
+
   return res.code(200).send({ status: 200, subtitles });
 };
 

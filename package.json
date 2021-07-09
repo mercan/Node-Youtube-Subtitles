@@ -1,5 +1,5 @@
 {
-  "name": "subtitles",
+  "name": "youtube-subtitles",
   "version": "1.0.0",
   "main": "src/server.js",
   "scripts": {
