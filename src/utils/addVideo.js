@@ -5,13 +5,12 @@ module.exports = (videoId) => {
 
   return new Promise((resolve, reject) => {
     exec(query, { shell: "/bin/sh" }, (err, stdout, stderr) => {
-      if (err || stderr) {
-        console.error(err || stderr);
-        return reject(false);
+      if (stderr || err) {
+        return reject(stderr || err);
       }
 
       console.log(stdout);
-      resolve(true);
+      return resolve(true);
     });
   });
 };

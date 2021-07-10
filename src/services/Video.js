@@ -57,13 +57,17 @@ class VideoService {
   }
 
   async add(videoId) {
-    const result = await this.addVideo(videoId);
-
-    if (!result) {
-      return { message: "Video ID not found" };
+    try {
+      await this.addVideo(videoId);
+    } catch (err) {
+      return { message: err.startsWith("ERROR: ") ? err.split("ERROR: ")[1].trim() : err.trim() };
     }
 
     const subtitles = await this.xmlToJson(videoId);
+
+    if (!subtitles) {
+      return { server: "Server error" };
+    }
 
     try {
       await this.videoModel.create(subtitles);
