@@ -27,6 +27,7 @@ const searchText = async (req, res) => {
       message: "Invalid url",
     });
   }
+
   const subtitles = await VideoService.findOne(videoId, trim == "true" ? text.trim() : text, lang);
 
   if (subtitles.server) {
