@@ -1,7 +1,7 @@
-const VideoService = require("../../services/Video");
+const VideoService = require("../../services/video");
 
 const searchText = async (req, res) => {
-  let { url, text, lang = "tr", trim = false } = req.query;
+  let { url, text, lang = "tr" } = req.query;
 
   const youtube = "https://www.youtube.com/watch?v=";
   const youtubeUrlRegex =
@@ -13,30 +13,23 @@ const searchText = async (req, res) => {
     } else {
       return res.code(400).send({
         statusCode: 400,
-        message: "Invalid url",
+        message: "Invalid URL",
       });
     }
   }
 
   const youtubeURL = new URL(url);
-  const videoId = youtubeURL.searchParams.get("v") ?? youtubeURL.pathname.slice(1);
+  const videoId =
+    youtubeURL.searchParams.get("v") ?? youtubeURL.pathname.slice(1);
 
   if (videoId.length !== 11) {
     return res.code(400).send({
       statusCode: 400,
-      message: "Invalid url",
+      message: "Invalid URL",
     });
   }
 
-  const subtitles = await VideoService.findOne(videoId, trim == "true" ? text.trim() : text, lang);
-
-  if (subtitles.server) {
-    return res.code(500).send({ statusCode: 500, message: subtitles.server });
-  }
-
-  if (subtitles.message) {
-    return res.code(404).send({ statusCode: 404, message: subtitles.message });
-  }
+  const subtitles = await VideoService.findOne(videoId, text, lang);
 
   if (subtitles.error) {
     return res.code(400).send({ statusCode: 400, message: subtitles.error });

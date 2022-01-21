@@ -21,12 +21,18 @@ module.exports = (videoId) => {
     parseAttributeValue: true,
   };
 
-  const xmlDataTR = fs.readFileSync(`${__dirname}/../subtitles/${videoId}>${title}>.tr.ttml`, {
-    encoding: "utf-8",
-  });
-  const xmlDataEN = fs.readFileSync(`${__dirname}/../subtitles/${videoId}>${title}>.en.ttml`, {
-    encoding: "utf-8",
-  });
+  const xmlDataTR = fs.readFileSync(
+    `${__dirname}/../subtitles/${videoId}>${title}>.tr.ttml`,
+    {
+      encoding: "utf-8",
+    }
+  );
+  const xmlDataEN = fs.readFileSync(
+    `${__dirname}/../subtitles/${videoId}>${title}>.en.ttml`,
+    {
+      encoding: "utf-8",
+    }
+  );
 
   const jsonDataTR = parser.parse(xmlDataTR, options, true);
   const jsonDataEN = parser.parse(xmlDataEN, options, true);
@@ -43,14 +49,20 @@ module.exports = (videoId) => {
   ];
 
   for (const index in subtitles) {
-    subtitles[index].subtitle = subtitles[index].subtitle.flatMap(({ text, attr }) => {
-      const { begin: start, end } = attr;
+    subtitles[index].subtitle = subtitles[index].subtitle.flatMap(
+      ({ text, attr }) => {
+        const { begin: start, end } = attr;
 
-      return text ? { text: String(text).replace(/&#39;/g, "'"), start, end } : [];
-    });
+        return text
+          ? { text: String(text).replace(/&#39;/g, "'"), start, end }
+          : [];
+      }
+    );
   }
 
-  selectedFiles.forEach((file) => fs.unlinkSync(`${__dirname}/../subtitles/${file}`));
+  selectedFiles.forEach((file) =>
+    fs.unlinkSync(`${__dirname}/../subtitles/${file}`)
+  );
 
   return { id: videoId, title, subtitles };
 };

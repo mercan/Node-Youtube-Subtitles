@@ -9,7 +9,6 @@ module.exports = (videoId) => {
         return reject(stderr || err);
       }
 
-      console.log(stdout);
       return resolve(true);
     });
   });
